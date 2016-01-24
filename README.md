@@ -30,10 +30,10 @@ or
 or 
   ##### `ht->dispose(ht);`
   
-  * Unstable functions
+ # Unstable functions
   Following methods are still in unstable state and does not guaranteed to work.
   
-  ** Clear hashtable
+  * Clear hashtable
   	Clears the entire hashtable (all keys will be deleted)
   	#####`ht_clear(ht);`
   	or
