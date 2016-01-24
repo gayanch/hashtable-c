@@ -55,10 +55,14 @@ int ht_get(Hashtable *ht, int key) {
 		return -1;
 	}
 	
-	if (!ht_contains_key(ht, key)) return -1;
+	//if (!ht_contains_key(ht, key)) return -1;
 	
 	int location = _ht_hash(ht->size, key);
+	
+	//first bucket of the chain
 	Bucket *b = (&ht->table[location])->next;
+	
+	//search linearly until a bucket with provided key found
 	while (b != NULL) {
 		if (b->key == key) {
 			return b->value;
@@ -66,6 +70,7 @@ int ht_get(Hashtable *ht, int key) {
 		b = b->next;
 	}
 	
+	//key not found
 	return -1;
 }
 
@@ -73,9 +78,14 @@ int ht_contains_key(Hashtable *ht, int key) {
 	if (ht == NULL)	return 0;
 	
 	int location = _ht_hash(ht->size, key);
-	if ((&ht->table[location]) == NULL)	return 0;
 	
+	//getting first bucket of chain
 	Bucket *b = (&ht->table[location])->next;
+	
+	//first bucket is null
+	if (b == NULL)	return 0;
+	
+	//search linearly for a matching bucket
 	while (b != NULL) {
 		if (b->key == key) {
 			return 1;
@@ -83,13 +93,17 @@ int ht_contains_key(Hashtable *ht, int key) {
 		b = b->next;
 	}
 	
+	//no bucket with provided key found
 	return 0;
 }
 
 int ht_delete(Hashtable *ht, int key) {
-	if (ht == NULL)	return -1;								//null hashtable provided, can not proceed
+	//null hashtable provided, can not proceed
+	if (ht == NULL)	return -1;
 	
-	if (!ht_contains_key(ht, key))	return -1;		//key not found, nothing to delete
+	//key not found, nothing to delete
+	//redundant, if key found
+	//if (!ht_contains_key(ht, key))	return -1;
 	
 	int location = _ht_hash(ht->size, key);
 	Bucket *b = (&ht->table[location])->next;
@@ -99,18 +113,23 @@ int ht_delete(Hashtable *ht, int key) {
 			int value = b->value;
 			//key found, check if it is in the middle of chain
 			if (b->next != NULL) {
+				//remove bucket and, reconnect links in chain
 				Bucket *tmp = b;
 				b = b->next;
 				free(tmp);
+				tmp = NULL;
 				return value;
 			} else {
 				//last bucket, free up memory
 				free(b);
+				b = NULL;
 				return value;
 			}
 		}
 		b = b->next;
 	}
+	
+	//provided key is not found, nothing to delete
 	return -1;
 }
 
