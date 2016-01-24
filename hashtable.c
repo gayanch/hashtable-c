@@ -12,7 +12,7 @@
 
 Hashtable* ht_new(int size) {
 	if (size <=0 ) {
-		printf("Invalid size.\n")
+		printf("Invalid size.\n");
 		return NULL;
 	}
 	
@@ -145,12 +145,31 @@ void ht_clear(Hashtable *ht) {
 	
 	//freeying memeory and mallocing new hashtable does not seem to work,
 	//Thinking........... :)
+/*	int size = ht->size;*/
+/*	ht_dispose(ht);*/
+/*	ht = ht_new(size);*/
+	
+	//work around
+	//freeying & malloc'ing again does not seem to work
+	//freeying individual buckets in table
 	int size = ht->size;
-	ht_dispose(ht);
-	ht = ht_new(size);
+	int i;
+	for (i = 0; i < size; i++) {
+		Bucket *b = (&ht->table[i])->next;
+		
+		//access buckets in list and free them
+		while (b != NULL) {
+			Bucket *next = b->next;
+			free(b);
+			b = next;
+		}
+	}
 }
 
 void ht_dispose(Hashtable *ht) {
+	//free up all buckets in chains
+	ht_clear(ht);
+
 	free(ht->table);
 	free(ht);
 	ht->table = NULL;
