@@ -16,11 +16,11 @@ Hashtable* ht_new(int size) {
 	ht->table = malloc(size * sizeof *ht->table);
 	
 	//associated function pointers
-	ht->ht_put = &ht_put;
-	ht->ht_get = &ht_get;
-	ht->ht_delete = &ht_delete;
-	ht->ht_contains_key = &ht_contains_key;
-	ht->ht_dispose = &ht_dispose;
+	ht->put = &ht_put;
+	ht->get = &ht_get;
+	ht->delete = &ht_delete;
+	ht->contains_key = &ht_contains_key;
+	ht->dispose = &ht_dispose;
 	
 	return ht;
 }
