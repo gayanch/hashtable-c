@@ -142,13 +142,7 @@ int ht_delete(Hashtable *ht, int key) {
 
 void ht_clear(Hashtable *ht) {
 	if (ht == NULL) return;
-	
-	//freeying memeory and mallocing new hashtable does not seem to work,
-	//Thinking........... :)
-/*	int size = ht->size;*/
-/*	ht_dispose(ht);*/
-/*	ht = ht_new(size);*/
-	
+
 	//work around
 	//freeying & malloc'ing again does not seem to work
 	//freeying individual buckets in table
@@ -174,7 +168,4 @@ void ht_dispose(Hashtable *ht) {
 	free(ht);
 	ht->table = NULL;
 	ht = NULL;
-	
-	//Note:
-	//Should we free individual buckets in chain??
 }
