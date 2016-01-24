@@ -25,14 +25,14 @@ typedef struct bucket Bucket;
 
 struct hashtable {
 	int size;
-	Bucket **table;
+	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
-	void (*ht_put)(struct hashtable *ht, int key, int value);
-	int (*ht_get)(struct hashtable *ht, int key);
-	int (*ht_delete)(struct hashtable *ht, int key);
-	int (*ht_contains_key)(struct hashtable *ht, int key);
-	void (*ht_dispose)(struct hashtable *ht);
+	void (*put)(struct hashtable *ht, int key, int value);
+	int (*get)(struct hashtable *ht, int key);
+	int (*delete)(struct hashtable *ht, int key);
+	int (*contains_key)(struct hashtable *ht, int key);
+	void (*dispose)(struct hashtable *ht);
 };
 
 typedef struct hashtable Hashtable;
