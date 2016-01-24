@@ -28,10 +28,12 @@ struct hashtable {
 	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
+	struct hashtable* (*new)(int size);
 	void (*put)(struct hashtable *ht, int key, int value);
 	int (*get)(struct hashtable *ht, int key);
 	int (*delete)(struct hashtable *ht, int key);
 	int (*contains_key)(struct hashtable *ht, int key);
+	void (*clear)(struct hashtable *);
 	void (*dispose)(struct hashtable *ht);
 };
 
@@ -54,6 +56,9 @@ int ht_delete(Hashtable *ht, int key);
 
 //returns 1 if key exists in hashtable, -1 otherwise
 int ht_contains_key(Hashtable *ht, int key);
+
+//clears all the data in hashtable
+void ht_clear(Hashtable *ht);
 
 //free up memory allocated for hashtable
 void ht_dispose(Hashtable *ht);

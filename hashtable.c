@@ -16,10 +16,12 @@ Hashtable* ht_new(int size) {
 	ht->table = malloc(size * sizeof *ht->table);
 	
 	//associated function pointers
+	ht->new = &ht_new;
 	ht->put = &ht_put;
 	ht->get = &ht_get;
 	ht->delete = &ht_delete;
 	ht->contains_key = &ht_contains_key;
+	ht->clear = &ht_clear;
 	ht->dispose = &ht_dispose;
 	
 	return ht;
@@ -133,7 +135,15 @@ int ht_delete(Hashtable *ht, int key) {
 	return -1;
 }
 
+void ht_clear(Hashtable *ht) {
+	int size = ht->size;
+	ht_dispose(ht);
+	ht = ht_new(size);
+}
+
 void ht_dispose(Hashtable *ht) {
 	free(ht->table);
 	free(ht);
+	ht->table = NULL;
+	ht = NULL;
 }
