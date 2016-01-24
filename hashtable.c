@@ -11,12 +11,16 @@
 #include "hashtable.h"
 
 Hashtable* ht_new(int size) {
+	if (size <=0 ) {
+		printf("Invalid size.\n")
+		return NULL;
+	}
+	
 	Hashtable *ht = malloc(sizeof *ht);
 	ht->size = size;
 	ht->table = malloc(size * sizeof *ht->table);
 	
 	//associated function pointers
-	ht->new = &ht_new;
 	ht->put = &ht_put;
 	ht->get = &ht_get;
 	ht->delete = &ht_delete;
@@ -57,6 +61,7 @@ int ht_get(Hashtable *ht, int key) {
 		return -1;
 	}
 	
+	//redundant, marked for removal
 	//if (!ht_contains_key(ht, key)) return -1;
 	
 	int location = _ht_hash(ht->size, key);
@@ -104,7 +109,7 @@ int ht_delete(Hashtable *ht, int key) {
 	if (ht == NULL)	return -1;
 	
 	//key not found, nothing to delete
-	//redundant, if key found
+	//redundant, if key found, marked for removal
 	//if (!ht_contains_key(ht, key))	return -1;
 	
 	int location = _ht_hash(ht->size, key);
@@ -136,6 +141,10 @@ int ht_delete(Hashtable *ht, int key) {
 }
 
 void ht_clear(Hashtable *ht) {
+	if (ht == NULL) return;
+	
+	//freeying memeory and mallocing new hashtable does not seem to work,
+	//Thinking........... :)
 	int size = ht->size;
 	ht_dispose(ht);
 	ht = ht_new(size);
@@ -146,4 +155,7 @@ void ht_dispose(Hashtable *ht) {
 	free(ht);
 	ht->table = NULL;
 	ht = NULL;
+	
+	//Note:
+	//Should we free individual buckets in chain??
 }

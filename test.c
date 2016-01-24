@@ -9,6 +9,8 @@ int main() {
 	ht_put(ht, 10, 50);		//other method of invoking functions
 	ht_put(ht, 33, 150);
 	ht_put(ht, 56, 250);
+	
+	//not working
 	ht_clear(ht);
 	
 	printf("Key: %d, Value: %d\n", 5, ht_get(ht, 5));
