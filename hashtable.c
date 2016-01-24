@@ -37,20 +37,16 @@ void ht_put(Hashtable *ht, int key, int value) {
 	}
 	
 	int location = _ht_hash(ht->size, key);
-	if (ht->table[location] == NULL) {
-		ht->table[location] = malloc(sizeof *ht->table[location]);
-		ht->table[location]->key = key;
-		ht->table[location]->value = value;
-	} else {
-		//collision occured, handle with separate chaining
-		Bucket *b = ht->table[location];
-		ht->table[location] = malloc(sizeof *ht->table[location]);
-		ht->table[location]->key = key;
-		ht->table[location]->value = value;
-		
-		//chain next buckets to new bucket
-		ht->table[location]->next = b;
-	}
+	//new code
+	//now ht->table contains only references to heads of chains,
+	//ht->table's keys, values are ignored
+ 	Bucket *b = (&ht->table[location])->next;
+	Bucket *new = malloc(sizeof *new);
+	new->key = key;
+	new->value = value;
+	
+	(&ht->table[location])->next = new;
+	new->next = b;
 }
 
 int ht_get(Hashtable *ht, int key) {
@@ -62,7 +58,7 @@ int ht_get(Hashtable *ht, int key) {
 	if (!ht_contains_key(ht, key)) return -1;
 	
 	int location = _ht_hash(ht->size, key);
-	Bucket *b = ht->table[location];
+	Bucket *b = (&ht->table[location])->next;
 	while (b != NULL) {
 		if (b->key == key) {
 			return b->value;
@@ -77,9 +73,9 @@ int ht_contains_key(Hashtable *ht, int key) {
 	if (ht == NULL)	return 0;
 	
 	int location = _ht_hash(ht->size, key);
-	if (ht->table[location] == NULL)	return 0;
+	if ((&ht->table[location]) == NULL)	return 0;
 	
-	Bucket *b = ht->table[location];
+	Bucket *b = (&ht->table[location])->next;
 	while (b != NULL) {
 		if (b->key == key) {
 			return 1;
@@ -96,7 +92,7 @@ int ht_delete(Hashtable *ht, int key) {
 	if (!ht_contains_key(ht, key))	return -1;		//key not found, nothing to delete
 	
 	int location = _ht_hash(ht->size, key);
-	Bucket *b = ht->table[location];
+	Bucket *b = (&ht->table[location])->next;
 	while (b != NULL) {
 		//check buckets with provided key
 		if (b->key == key) {

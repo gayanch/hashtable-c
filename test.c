@@ -11,6 +11,7 @@ int main() {
 	ht_put(ht, 56, 250);
 	
 	printf("Key: %d, Value: %d\n", 5, ht_get(ht, 5));
+	printf("Key: %d, Value: %d\n", 10, ht_get(ht, 10));
 	printf("Key: %d, Value: %d\n", 33, ht_get(ht, 33));
 	printf("Key: %d, Value: %d\n", 56, ht->ht_get(ht, 56));
 	
@@ -23,6 +24,6 @@ int main() {
 	
 	printf("Key contains %d: %d\n", 56, ht_contains_key(ht, 56));
 
-	
+	//always perform 'ht_dispose' after usage of hashtable to avoid memory leaks
 	ht_dispose(ht);
 }

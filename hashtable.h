@@ -25,7 +25,7 @@ typedef struct bucket Bucket;
 
 struct hashtable {
 	int size;
-	Bucket **table;
+	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
 	void (*ht_put)(struct hashtable *ht, int key, int value);
