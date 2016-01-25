@@ -24,6 +24,11 @@ or
   ##### `int value = ht_delete(ht, 10);` 
 or 
   ##### `int value = ht->delete(ht, 10);`
+  
+* Check the load factor of hashtable
+ ##### `double load_factor = ht_load_factor(ht);`
+or
+ ##### `double load_factor = ht->load_factor(ht);`
 
 * Finally dispose hashtable
   ##### `ht_dispose(ht);` 
