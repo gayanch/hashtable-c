@@ -10,21 +10,23 @@
 
 #include "hashtable.h"
 
-Hashtable* ht_new(int size) {
-	if (size <=0 ) {
+Hashtable* ht_new(int cap) {
+	if (cap <=0 ) {
 		printf("Invalid size.\n");
 		return NULL;
 	}
 	
 	Hashtable *ht = malloc(sizeof *ht);
-	ht->size = size;
-	ht->table = malloc(size * sizeof *ht->table);
+	ht->cap = cap;
+	ht->size = 0;
+	ht->table = malloc(cap * sizeof *ht->table);
 	
 	//associated function pointers
 	ht->put = &ht_put;
 	ht->get = &ht_get;
 	ht->delete = &ht_delete;
 	ht->contains_key = &ht_contains_key;
+	ht->load_factor = &ht_load_factor;
 	ht->clear = &ht_clear;
 	ht->dispose = &ht_dispose;
 	
@@ -32,8 +34,8 @@ Hashtable* ht_new(int size) {
 }
 
 //To-Do: implement a better hashing algorithm
-int _ht_hash(int size, int key) {
-	return key % size;
+int _ht_hash(int cap, int key) {
+	return key % cap;
 }
 
 void ht_put(Hashtable *ht, int key, int value) {
@@ -42,7 +44,7 @@ void ht_put(Hashtable *ht, int key, int value) {
 		return;
 	}
 	
-	int location = _ht_hash(ht->size, key);
+	int location = _ht_hash(ht->cap, key);
 	//new code
 	//now ht->table contains only references to heads of chains,
 	//ht->table's keys, values are ignored
@@ -53,6 +55,8 @@ void ht_put(Hashtable *ht, int key, int value) {
 	
 	(&ht->table[location])->next = new;
 	new->next = b;
+	
+	ht->size++;
 }
 
 int ht_get(Hashtable *ht, int key) {
@@ -64,7 +68,7 @@ int ht_get(Hashtable *ht, int key) {
 	//redundant, marked for removal
 	//if (!ht_contains_key(ht, key)) return -1;
 	
-	int location = _ht_hash(ht->size, key);
+	int location = _ht_hash(ht->cap, key);
 	
 	//first bucket of the chain
 	Bucket *b = (&ht->table[location])->next;
@@ -84,7 +88,7 @@ int ht_get(Hashtable *ht, int key) {
 int ht_contains_key(Hashtable *ht, int key) {
 	if (ht == NULL)	return 0;
 	
-	int location = _ht_hash(ht->size, key);
+	int location = _ht_hash(ht->cap, key);
 	
 	//getting first bucket of chain
 	Bucket *b = (&ht->table[location])->next;
@@ -104,6 +108,10 @@ int ht_contains_key(Hashtable *ht, int key) {
 	return 0;
 }
 
+double ht_load_factor(Hashtable *ht) {
+	return (double)ht->size/(double)ht->cap;
+}
+
 int ht_delete(Hashtable *ht, int key) {
 	//null hashtable provided, can not proceed
 	if (ht == NULL)	return -1;
@@ -112,7 +120,7 @@ int ht_delete(Hashtable *ht, int key) {
 	//redundant, if key found, marked for removal
 	//if (!ht_contains_key(ht, key))	return -1;
 	
-	int location = _ht_hash(ht->size, key);
+	int location = _ht_hash(ht->cap, key);
 	Bucket *b = (&ht->table[location])->next;
 	while (b != NULL) {
 		//check buckets with provided key
@@ -125,13 +133,15 @@ int ht_delete(Hashtable *ht, int key) {
 				b = b->next;
 				free(tmp);
 				tmp = NULL;
+				ht->size--;
 				return value;
 			} else {
 				//last bucket, free up memory
 				free(b);
 				b = NULL;
+				ht->size--;
 				return value;
-			}
+			}			
 		}
 		b = b->next;
 	}
@@ -146,9 +156,9 @@ void ht_clear(Hashtable *ht) {
 	//work around
 	//freeying & malloc'ing again does not seem to work
 	//freeying individual buckets in table
-	int size = ht->size;
+	int cap = ht->cap;
 	int i;
-	for (i = 0; i < size; i++) {
+	for (i = 0; i < cap; i++) {
 		Bucket *b = (&ht->table[i])->next;
 		
 		//access buckets in list and free them
@@ -158,6 +168,7 @@ void ht_clear(Hashtable *ht) {
 			b = next;
 		}
 	}
+	ht->size = 0;
 }
 
 void ht_dispose(Hashtable *ht) {

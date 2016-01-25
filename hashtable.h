@@ -24,7 +24,12 @@ struct bucket {
 typedef struct bucket Bucket;
 
 struct hashtable {
+	//capacity of hashtable
+	int cap;
+	
+	//number of items in hashtable
 	int size;
+	
 	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
@@ -32,6 +37,7 @@ struct hashtable {
 	int (*get)(struct hashtable *ht, int key);
 	int (*delete)(struct hashtable *ht, int key);
 	int (*contains_key)(struct hashtable *ht, int key);
+	double (*load_factor)(struct hashtable *ht);
 	void (*clear)(struct hashtable *);
 	void (*dispose)(struct hashtable *ht);
 };
@@ -58,6 +64,9 @@ int ht_contains_key(Hashtable *ht, int key);
 
 //clears all the data in hashtable
 void ht_clear(Hashtable *ht);
+
+//returns the current load factor of hashtable
+double ht_load_factor(Hashtable *ht);
 
 //free up memory allocated for hashtable
 void ht_dispose(Hashtable *ht);
