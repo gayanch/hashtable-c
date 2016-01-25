@@ -34,11 +34,15 @@ Hashtable* ht_new(int cap) {
 }
 
 //To-Do: implement a better hashing algorithm
-int _ht_hash(int cap, int key) {
-	return key % cap;
+int _ht_hash(int cap, KT key) {
+	#if KT == int
+		return key % cap;
+	#elif KT == double
+		return (int)key % cap;
+	#endif
 }
 
-void ht_put(Hashtable *ht, int key, int value) {
+void ht_put(Hashtable *ht, KT key, VT value) {
 	if (ht == NULL) {
 		printf("Error: null hashtable");
 		return;
@@ -59,7 +63,7 @@ void ht_put(Hashtable *ht, int key, int value) {
 	ht->size++;
 }
 
-int ht_get(Hashtable *ht, int key) {
+VT ht_get(Hashtable *ht, KT key) {
 	if (ht == NULL) {
 		printf("Error: null hashtable");
 		return -1;
@@ -85,7 +89,7 @@ int ht_get(Hashtable *ht, int key) {
 	return -1;
 }
 
-int ht_contains_key(Hashtable *ht, int key) {
+int ht_contains_key(Hashtable *ht, KT key) {
 	if (ht == NULL)	return 0;
 	
 	int location = _ht_hash(ht->cap, key);
@@ -112,7 +116,7 @@ double ht_load_factor(Hashtable *ht) {
 	return (double)ht->size/(double)ht->cap;
 }
 
-int ht_delete(Hashtable *ht, int key) {
+VT ht_delete(Hashtable *ht, KT key) {
 	//null hashtable provided, can not proceed
 	if (ht == NULL)	return -1;
 	
@@ -125,7 +129,7 @@ int ht_delete(Hashtable *ht, int key) {
 	while (b != NULL) {
 		//check buckets with provided key
 		if (b->key == key) {
-			int value = b->value;
+			VT value = b->value;
 			//key found, check if it is in the middle of chain
 			if (b->next != NULL) {
 				//remove bucket and, reconnect links in chain

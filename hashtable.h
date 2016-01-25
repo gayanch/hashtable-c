@@ -15,9 +15,21 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+//type handling, if VT & KT is not defined, assume both as type int
+
+//type of key (supported types: int, double)
+#ifndef KT
+	#define KT int
+#endif
+
+//type of value (supported types: int, double)
+#ifndef VT
+	#define VT int
+#endif
+
 struct bucket {
-	int key;
-	int value;
+	KT key;
+	VT value;
 	struct bucket *next;
 };
 
@@ -33,10 +45,10 @@ struct hashtable {
 	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
-	void (*put)(struct hashtable *ht, int key, int value);
-	int (*get)(struct hashtable *ht, int key);
-	int (*delete)(struct hashtable *ht, int key);
-	int (*contains_key)(struct hashtable *ht, int key);
+	void (*put)(struct hashtable *ht, KT key, VT value);
+	VT (*get)(struct hashtable *ht, KT key);
+	VT (*delete)(struct hashtable *ht, KT key);
+	int (*contains_key)(struct hashtable *ht, KT key);
 	double (*load_factor)(struct hashtable *ht);
 	void (*clear)(struct hashtable *);
 	void (*dispose)(struct hashtable *ht);
@@ -45,22 +57,22 @@ struct hashtable {
 typedef struct hashtable Hashtable;
 
 //create and return a new hashtable, with given size
-Hashtable* ht_new(int size);
+Hashtable* ht_new(int cap);
 
 //adds key, value pair to hashtable
-void ht_put(Hashtable *ht, int key, int value);
+void ht_put(Hashtable *ht, KT key, VT value);
 
 //before invoking this method,
 //always make sure key exists in hashtable by using 'ht_contains_key' method
 //returns value of key if exists, -1 otherwise (do not rely on -1 to decide whether key exists, 
 //use 'ht_contains_key' instead)
-int ht_get(Hashtable *ht, int key);
+VT ht_get(Hashtable *ht, KT key);
 
 //returns the value of deleting key, returns -1 otherwise
-int ht_delete(Hashtable *ht, int key);
+VT ht_delete(Hashtable *ht, KT key);
 
 //returns 1 if key exists in hashtable, -1 otherwise
-int ht_contains_key(Hashtable *ht, int key);
+int ht_contains_key(Hashtable *ht, KT key);
 
 //clears all the data in hashtable
 void ht_clear(Hashtable *ht);
@@ -73,6 +85,6 @@ void ht_dispose(Hashtable *ht);
 
 //internal function, should not call by client code
 //returns hash value of given key
-int _ht_hash(int size, int key);
+int _ht_hash(int size, KT key);
 
 #endif
