@@ -59,7 +59,7 @@ void ht_put(Hashtable *ht, int key, int value) {
 	ht->size++;
 }
 
-int ht_get(Hashtable *ht, int key) {
+int ht_get(const Hashtable *ht, int key) {
 	if (ht == NULL) {
 		printf("Error: null hashtable");
 		return -1;
@@ -85,7 +85,7 @@ int ht_get(Hashtable *ht, int key) {
 	return -1;
 }
 
-int ht_contains_key(Hashtable *ht, int key) {
+int ht_contains_key(const Hashtable *ht, int key) {
 	if (ht == NULL)	return 0;
 	
 	int location = _ht_hash(ht->cap, key);
@@ -108,7 +108,7 @@ int ht_contains_key(Hashtable *ht, int key) {
 	return 0;
 }
 
-double ht_load_factor(Hashtable *ht) {
+double ht_load_factor(const Hashtable *ht) {
 	return (double)ht->size/(double)ht->cap;
 }
 

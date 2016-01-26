@@ -34,10 +34,10 @@ struct hashtable {
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
 	void (*put)(struct hashtable *ht, int key, int value);
-	int (*get)(struct hashtable *ht, int key);
+	int (*get)(const struct hashtable *ht, int key);
 	int (*delete)(struct hashtable *ht, int key);
-	int (*contains_key)(struct hashtable *ht, int key);
-	double (*load_factor)(struct hashtable *ht);
+	int (*contains_key)(const struct hashtable *ht, int key);
+	double (*load_factor)(const struct hashtable *ht);
 	void (*clear)(struct hashtable *);
 	void (*dispose)(struct hashtable *ht);
 };
@@ -54,19 +54,19 @@ void ht_put(Hashtable *ht, int key, int value);
 //always make sure key exists in hashtable by using 'ht_contains_key' method
 //returns value of key if exists, -1 otherwise (do not rely on -1 to decide whether key exists, 
 //use 'ht_contains_key' instead)
-int ht_get(Hashtable *ht, int key);
+int ht_get(const Hashtable *ht, int key);
 
 //returns the value of deleting key, returns -1 otherwise
 int ht_delete(Hashtable *ht, int key);
 
 //returns 1 if key exists in hashtable, -1 otherwise
-int ht_contains_key(Hashtable *ht, int key);
+int ht_contains_key(const Hashtable *ht, int key);
 
 //clears all the data in hashtable
 void ht_clear(Hashtable *ht);
 
 //returns the current load factor of hashtable
-double ht_load_factor(Hashtable *ht);
+double ht_load_factor(const Hashtable *ht);
 
 //free up memory allocated for hashtable
 void ht_dispose(Hashtable *ht);
