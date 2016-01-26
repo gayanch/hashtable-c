@@ -37,6 +37,6 @@ or
     
 * Clear hashtable
  Clears the entire hashtable (all keys will be deleted). This may be a time consuming task depending on the capacity of hashtable
-  `ht_clear(ht);`
+  ##### `ht_clear(ht);`
  or
-  `ht->clear(ht);`
+  ##### `ht->clear(ht);`
