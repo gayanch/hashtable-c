@@ -34,12 +34,9 @@ or
   ##### `ht_dispose(ht);` 
 or 
   ##### `ht->dispose(ht);`
-  
- # Unstable functions
-  Following methods are still in unstable state and does not guaranteed to work.
-  
-  * Clear hashtable
-  	Clears the entire hashtable (all keys will be deleted)
-  	`ht_clear(ht);`
-  	or
-  	`ht->clear(ht);`
+    
+* Clear hashtable
+ Clears the entire hashtable (all keys will be deleted). This may be a time consuming task depending on the capacity of hashtable
+  `ht_clear(ht);`
+ or
+  `ht->clear(ht);`
