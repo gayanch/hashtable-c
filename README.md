@@ -43,3 +43,4 @@ or
   
  # Testing functionalities
  * defining the type of value by VTYPE preprocessor directive. int, char, double, float are supported. 
+ * if VTYPE is not defined, program will fallback to int mode

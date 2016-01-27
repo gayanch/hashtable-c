@@ -41,7 +41,7 @@ struct hashtable {
 	Bucket *table;
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
-	void (*put)(struct hashtable *ht, int key, int value);
+	void (*put)(struct hashtable *ht, int key, VTYPE value);
 	VTYPE (*get)(const struct hashtable *ht, int key);
 	VTYPE (*delete)(struct hashtable *ht, int key);
 	int (*contains_key)(const struct hashtable *ht, int key);
