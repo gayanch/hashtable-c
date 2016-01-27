@@ -40,3 +40,6 @@ or
   ##### `ht_clear(ht);`
  or
   ##### `ht->clear(ht);`
+  
+ # Testing functionalities
+ * defining the type of value by VTYPE preprocessor directive. int, char, double, float are supported. 

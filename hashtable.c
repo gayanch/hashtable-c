@@ -38,7 +38,7 @@ int _ht_hash(int cap, int key) {
 	return key % cap;
 }
 
-void ht_put(Hashtable *ht, int key, int value) {
+void ht_put(Hashtable *ht, int key, VTYPE value) {
 	if (ht == NULL) {
 		fprintf(stderr, "error: null hashtable\n");
 		return;
@@ -58,7 +58,7 @@ void ht_put(Hashtable *ht, int key, int value) {
 	ht->size++;
 }
 
-int ht_get(const Hashtable *ht, int key) {
+VTYPE ht_get(const Hashtable *ht, int key) {
 	if (ht == NULL) {
 		fprintf(stderr, "error: null hashtable\n");
 		return -1;

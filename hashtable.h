@@ -15,9 +15,17 @@
 #ifndef HASHTABLE_H
 #define HASHTABLE_H
 
+//VTYPE is the type of value, default type is int,
+//Supports: int, double, float, char
+#ifndef VTYPE 
+	#define VTYPE int
+#endif
+
+//for now keys are limited to type int
+
 struct bucket {
 	int key;
-	int value;
+	VTYPE value;
 	struct bucket *next;
 };
 
@@ -34,8 +42,8 @@ struct hashtable {
 	
 	//pointers for associated hashtable functions, will be assigned by ht_new function
 	void (*put)(struct hashtable *ht, int key, int value);
-	int (*get)(const struct hashtable *ht, int key);
-	int (*delete)(struct hashtable *ht, int key);
+	VTYPE (*get)(const struct hashtable *ht, int key);
+	VTYPE (*delete)(struct hashtable *ht, int key);
 	int (*contains_key)(const struct hashtable *ht, int key);
 	double (*load_factor)(const struct hashtable *ht);
 	void (*clear)(struct hashtable *);
@@ -48,16 +56,16 @@ typedef struct hashtable Hashtable;
 Hashtable* ht_new(int size);
 
 //adds key, value pair to hashtable
-void ht_put(Hashtable *ht, int key, int value);
+void ht_put(Hashtable *ht, int key, VTYPE value);
 
 //before invoking this method,
 //always make sure key exists in hashtable by using 'ht_contains_key' method
 //returns value of key if exists, -1 otherwise (do not rely on -1 to decide whether key exists, 
 //use 'ht_contains_key' instead)
-int ht_get(const Hashtable *ht, int key);
+VTYPE ht_get(const Hashtable *ht, int key);
 
 //returns the value of deleting key, returns -1 otherwise
-int ht_delete(Hashtable *ht, int key);
+VTYPE ht_delete(Hashtable *ht, int key);
 
 //returns 1 if key exists in hashtable, -1 otherwise
 int ht_contains_key(const Hashtable *ht, int key);
